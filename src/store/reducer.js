@@ -47,6 +47,17 @@ const reducer = (state = initialState, action) => {
         };
       }
       return state;
+    case actionTypes.ADDTOMUSIC:
+      return {
+        ...state,
+        MusicUIData: {
+          ...state.MusicUIData,
+          src: action.val.album.images[0].url,
+          album: action.val.album.name,
+          song: action.val.name,
+          artist: action.val.artists[0].name,
+        },
+      };
     default:
       return state;
   }
