@@ -1,26 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import MusicUI from "./MusicUI/MusicUI";
+import SearchMusic from "./MusicUI/SearchMusic/SearchMusic";
+import { Route, Switch } from "react-router-dom";
+import { connect } from "react-redux";
+import Login from "./Login/Login";
+// import SearchList from "./MusicUI/SearchMusic/SearchList";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  render() {
+    console.log(this.props.login);
+    return (
+      <div className="App">
+        <Switch>
+          <Route path="/search" component={SearchMusic} />
+          <Route path="/login" component={Login} />
+          <Route path="/" component={MusicUI} />
+        </Switch>
+      </div>
+    );
+  }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    login: state.login,
+    token: state.token,
+  };
+};
+// const mapDispatchToProps = state => {};
+
+export default connect(mapStateToProps)(App);
