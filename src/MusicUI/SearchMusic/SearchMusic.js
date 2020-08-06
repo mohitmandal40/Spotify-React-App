@@ -4,6 +4,8 @@ import { Component } from "react";
 import spotify from "spotify-web-api-js";
 
 import SearchList from "./SearchList";
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 // import ReactPlayer from "react-player";
 // import axios from "axios";
 
@@ -39,6 +41,25 @@ class SearchMusic extends Component {
       const res = await spotifyApi.getMyCurrentPlaybackState();
       // console.log(res.item.name, res.item.album.images[0].url);
       console.log(res);
+      const play = ({
+        spotify_uri,
+        playerInstance: {
+          _options: { getOAuthToken, id },
+        },
+      }) => {
+        getOAuthToken(access_token => {
+          fetch(`https://api.spotify.com/v1/me/player/play?device_id=${id}`, {
+            method: "PUT",
+            body: JSON.stringify({ uris: [spotify_uri] }),
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${access_token}`,
+            },
+          })
+            .then(res => res.json())
+            .then(res => console.log(res));
+        });
+      };
       // const token = spotifyApi.getAccessToken();
       // fetch("https://api.spotify.com/v1/me/player/play", {
       //   method: "PUT",
@@ -92,7 +113,12 @@ class SearchMusic extends Component {
   }
 }
 
-export default SearchMusic;
+const mapStateToProps = state => {
+  return {
+    token: state.token,
+  };
+};
+export default connect(mapStateToProps)(SearchMusic);
 
 // filterHandler = e => {
 //   const fakeSong = [...this.state.song];

@@ -28,6 +28,7 @@ const initialState = {
     album: "The Mohit Party",
     song: "Final Masquerade",
     artist: "Linkin Park",
+    uri: "",
   },
 };
 
@@ -40,13 +41,11 @@ const reducer = (state = initialState, action) => {
         token: actionTypes.TOKEN,
       };
     case actionTypes.AUTHENTICATE:
-      if (state.token) {
-        return {
-          ...state,
-          login: true,
-        };
-      }
-      return state;
+      return {
+        ...state,
+        token: action.token,
+      };
+
     case actionTypes.ADDTOMUSIC:
       return {
         ...state,
@@ -56,6 +55,7 @@ const reducer = (state = initialState, action) => {
           album: action.val.album.name,
           song: action.val.name,
           artist: action.val.artists[0].name,
+          uri: action.val.uri,
         },
       };
     default:

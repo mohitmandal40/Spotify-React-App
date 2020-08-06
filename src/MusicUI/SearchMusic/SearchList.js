@@ -7,6 +7,7 @@ import { withRouter } from "react-router-dom";
 
 class SearchList extends Component {
   cta = val => {
+    console.log(val);
     this.props.cta(val);
     console.log(this.props);
     this.props.history.push("/");

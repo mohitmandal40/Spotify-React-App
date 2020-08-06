@@ -13,48 +13,101 @@ import {
   faStepForward,
   faPlay,
   faBars,
+  faPause,
 } from "@fortawesome/free-solid-svg-icons";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
+import SpotifyWebApi from "spotify-web-api-js";
+
+const SpotifyApi = new SpotifyWebApi();
 
 export class MusicUI extends Component {
   state = {
-    songs: [
-      {
-        song1: "http://streaming.tdiradio.com:8000/house.mp3",
-        desc: "01. Clouds In The Forest",
-        time: "3:20",
-      },
-      {
-        song1: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-        desc: "02. Rat In The River",
-        time: "2:48",
-      },
-      {
-        song1: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-        desc: "03. Giants And Companions",
-        time: "2:27",
-      },
-      {
-        song1: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
-        desc: "04. Ashamed Of Light",
-        time: "3:32",
-      },
-      {
-        song1: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
-        desc: "05. Doubting The Forest",
-        time: "2:40",
-      },
-      {
-        song1: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
-        desc: "06. Criminals Of The Lake",
-        time: "2:55",
-      },
-    ],
+    toggleBtn: true,
   };
 
+  play = async () => {
+    this.setState(prevState => ({ toggleBtn: !prevState.toggleBtn }));
+    // SpotifyApi.play();
+    fetch(
+      `https://api.spotify.com/v1/me/player/play?device_id=${"4c9cd84f97add09353dfeebf5c86fa571bd18bfc"}`,
+      {
+        method: "PUT",
+        body: JSON.stringify({
+          uris: ["spotify:track:7xGfFoTpQ2E7fRF5lN10tr"],
+        }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${"BQBwWyoigJmIynoT_--DeavY4kZz_QDi9l9CpElQJhhgtPIH2NGaTcDSRqz954PhNenBaVYDnOP5PSxTgvNfnOLTYZ3BwntlnIO6jJDoyfKp1nur9eIqk7lzvu_5YpPOR10Wn_3hGgagg_7fI0GyN3pEW9rUw3nPzgyyQXAIkHXeG6fsB02zJqE"}`,
+        },
+      }
+    );
+    //   .then(res => res.json())
+    //   .then(res => console.log(res));
+    // axios.put("");
+    // const play = ({
+    //   spotify_uri,
+    //   playerInstance: {
+    //     _options: { getOAuthToken, id },
+    //   },
+    // }) => {
+    //   getOAuthToken(access_token => {
+    //     fetch(`https://api.spotify.com/v1/me/player/play?device_id=${id}`, {
+    //       method: "PUT",
+    //       body: JSON.stringify({ uris: [spotify_uri] }),
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //         Authorization: `Bearer ${access_token}`,
+    //       },
+    //     });
+    //   });
+    // };
+
+    // play({
+    //   playerInstance: player({ name: "..." }),
+    //   spotify_uri: "spotify:track:7xGfFoTpQ2E7fRF5lN10tr",
+    // });
+
+    // const play = ({
+    //   spotify_uri,
+    //   playerInstance: {
+    //     _options: { getOAuthToken, id },
+    //   },
+    // }) => {
+    //   getOAuthToken(access_token => {
+    //     fetch(`https://api.spotify.com/v1/me/player/play?device_id=${id}`, {
+    //       method: "PUT",
+    //       body: JSON.stringify({ uris: [spotify_uri] }),
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //         Authorization: `Bearer ${access_token}`,
+    //       },
+    //     });
+    //   });
+    // };
+
+    // play({
+    //   playerInstance: new Spotify.Player({ name: "..." }),
+    //   spotify_uri: "spotify:track:7xGfFoTpQ2E7fRF5lN10tr",
+    // });
+    // const spotifyApi = new spotify();
+    // spotifyApi.getMyDevices();
+    // spotifyApi.play(spotifyApi.getMyDevices());
+  };
+
+  pause = () => {
+    this.setState(prevState => ({ toggleBtn: !prevState.toggleBtn }));
+  };
+  componentDidMount() {
+    if (!this.props.token) {
+      const token = this.props.location.hash.split("=")[1];
+      sessionStorage.setItem("access_token", token);
+      this.props.tokenHandler(token);
+    }
+    return;
+  }
+
   render() {
-    // const token = this.props.location.hash.split("=")[1];
     return (
       <div className={classes.wrapper}>
         <div className={classes.player__container}>
@@ -72,9 +125,8 @@ export class MusicUI extends Component {
 
                 <li>
                   <NavLink
-                    to="/search"
+                    to={this.props.token ? "/search" : "/login"}
                     className={classes.list__link}
-                    // onClick={() => this.props.tokenHandler()}
                   >
                     <FontAwesomeIcon icon={faSearch} />
                   </NavLink>
@@ -109,9 +161,21 @@ export class MusicUI extends Component {
                 </li>
 
                 <li>
-                  <a href="google.com" className={classes.list__link}>
-                    <FontAwesomeIcon icon={faPlay} />
-                  </a>
+                  {this.state.toggleBtn ? (
+                    <button
+                      className={classes.list__link}
+                      onClick={() => this.play()}
+                    >
+                      <FontAwesomeIcon icon={faPlay} />
+                    </button>
+                  ) : (
+                    <button
+                      className={classes.list__link}
+                      onClick={() => this.pause()}
+                    >
+                      <FontAwesomeIcon icon={faPause} />
+                    </button>
+                  )}
                 </li>
 
                 <li>
@@ -163,11 +227,11 @@ const mapStateToProps = state => {
     MusicData: state.MusicUIData,
   };
 };
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     tokenHandler: token =>
-//       dispatch({ type: actionTypes.AUTHENTICATE, token: token }),
-//   };
-// };
+const mapDispatchToProps = dispatch => {
+  return {
+    tokenHandler: token =>
+      dispatch({ type: actionTypes.AUTHENTICATE, token: token }),
+  };
+};
 
-export default connect(mapStateToProps, null)(MusicUI);
+export default connect(mapStateToProps, mapDispatchToProps)(MusicUI);
