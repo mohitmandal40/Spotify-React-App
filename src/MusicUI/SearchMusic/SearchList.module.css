@@ -22,3 +22,11 @@
 .container {
   padding: 2px 16px;
 }
+
+@media (max-width: 54rem) {
+  .display {
+    grid-template-columns: 2fr;
+  }
+  /* .card {
+  } */
+}

@@ -24,11 +24,12 @@ const initialState = {
   login: false,
   token: null,
   MusicUIData: {
-    src: "http://ecx.images-amazon.com/images/I/51XSHShbPiL.jpg",
-    album: "The Mohit Party",
-    song: "Final Masquerade",
-    artist: "Linkin Park",
-    uri: "",
+    src: "https://i.scdn.co/image/ab67616d0000b27350a3147b4edd7701a876c6ce",
+    album: "WHEN WE ALL FALL ASLEEP, WHERE DO WE GO",
+    song: "bad guy",
+    artist: "Billie Eilish",
+    uri: "spotify:track:2Fxmhks0bxGSBdJ92vM42m",
+    duration_ms: "194087",
   },
 };
 
@@ -56,6 +57,7 @@ const reducer = (state = initialState, action) => {
           song: action.val.name,
           artist: action.val.artists[0].name,
           uri: action.val.uri,
+          duration_ms: action.val.duration_ms,
         },
       };
     default:

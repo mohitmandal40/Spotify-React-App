@@ -36,7 +36,9 @@ function getHashParams() {
 const { access_token } = getHashParams();
 
 axios.defaults.headers.common["Authorization"] = access_token;
+
 localStorage.setItem("access_token", access_token);
+console.log(localStorage.getItem("access_token"));
 spotifyApi.setAccessToken(access_token);
 
 const app = (

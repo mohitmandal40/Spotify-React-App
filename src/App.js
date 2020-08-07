@@ -13,7 +13,10 @@ class App extends Component {
         {this.props.token ? (
           <Route path="/search" component={SearchMusic} />
         ) : (
-          <Route path="/login" render={() => <h2>plz login</h2>} />
+          <Route
+            path="/login"
+            render={() => <h2 style={{ textAlign: "center" }}>plz login</h2>}
+          />
         )}
         <Route path="/" exact component={MusicUI} />
         <Route path="/login" component={Login} />

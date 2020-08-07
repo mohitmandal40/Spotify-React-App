@@ -7,14 +7,13 @@ import { withRouter } from "react-router-dom";
 
 class SearchList extends Component {
   cta = val => {
-    console.log(val);
     this.props.cta(val);
-    console.log(this.props);
+    console.log(val.duration_ms);
+    console.log(val);
     this.props.history.push("/");
   };
 
   render() {
-    console.log(this.props.list);
     const app = this.props.list.map(val => {
       return (
         <div
@@ -30,7 +29,6 @@ class SearchList extends Component {
           />
           <div className={classes.container}>
             <h4>{val.name}</h4>
-            {/* <p>{val.desc}</p> */}
           </div>
         </div>
       );
