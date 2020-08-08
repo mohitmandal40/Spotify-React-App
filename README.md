@@ -1,13 +1,27 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## TO RUN THIS APP
 
-## Available Scripts
+First go into terminal and run command yarn install after that
+there is a folder named as auth-server and inside of that there is authorization_code folder
+then there is a file named as app.js so you need to run that command
 
-In the project directory, you can run:
+cd --> auth-server --> authorization_code --> then run command node app.js
+then the server is running on [http://localhost:8888](http://localhost:8888)
+
+leave that server running and open new command terminal and goto go into the SOUND-CLOUD folder
+and run yarn start
+
+then you girst click on the search button to login first and only login to spotify premium account.
 
 ### `yarn start`
 
 Runs the app in the development mode.<br />
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Available Scripts
+
+In the project directory, you can run:
 
 The page will reload if you make edits.<br />
 You will also see any lint errors in the console.

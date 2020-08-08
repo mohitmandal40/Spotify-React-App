@@ -15,12 +15,11 @@ import {
   faPause,
   faStepBackward,
 } from "@fortawesome/free-solid-svg-icons";
-import { NavLink } from "react-router-dom";
-import { connect } from "react-redux";
 
 // import { makeStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
-import Slider from "@material-ui/core/Slider";
+
+import { NavLink } from "react-router-dom";
+import { connect } from "react-redux";
 
 export class MusicUI extends Component {
   state = {
@@ -29,9 +28,9 @@ export class MusicUI extends Component {
   };
   device_id;
   WEB_PLAYBACK_SDK_TOKEN = localStorage.getItem("access_token");
+
   play = async () => {
     this.setState(prevState => ({ toggleBtn: !prevState.toggleBtn }));
-    // SpotifyApi.play();
     fetch(
       `https://api.spotify.com/v1/me/player/play?device_id=${this.device_id}`,
       {
@@ -44,13 +43,7 @@ export class MusicUI extends Component {
           Authorization: `Bearer ${this.WEB_PLAYBACK_SDK_TOKEN}`,
         },
       }
-    )
-      .then(res => {
-        console.log(res);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    );
 
     // if (localStorage.getItem("state")) {
     //   fetch(
@@ -85,12 +78,7 @@ export class MusicUI extends Component {
           Authorization: `Bearer ${this.WEB_PLAYBACK_SDK_TOKEN}`,
         },
       }
-    )
-      .then(res => console.log(res))
-      .catch(err => {
-        console.log(err);
-      });
-    // .then(res => console.log(res));
+    );
   };
   nextSong = () => {
     // this.setState(prevState => ({ toggleBtn: !prevState.toggleBtn }));
@@ -149,16 +137,6 @@ export class MusicUI extends Component {
   }
 
   handleChange = e => {
-    // fetch(
-    //   `https://api.spotify.com/v1/me/player/volume?volume_percent=${e.target.value}`,
-    //   {
-    //     method: "PUT",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       Authorization: `Bearer ${this.WEB_PLAYBACK_SDK_TOKEN}`,
-    //     },
-    //   }
-    // );
     const value = e.target.value;
     const duration = () => {
       fetch(`https://api.spotify.com/v1/me/player/seek?position_ms=${value}`, {
@@ -172,6 +150,18 @@ export class MusicUI extends Component {
     setTimeout(duration, 0);
   };
 
+  volumeHandler = e => {
+    fetch(
+      `https://api.spotify.com/v1/me/player/volume?volume_percent=${e.target.value}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.WEB_PLAYBACK_SDK_TOKEN}`,
+        },
+      }
+    );
+  };
   render() {
     let musicUi = (
       <div className={classes.wrapper} style={{ textAlign: "center" }}>
@@ -206,7 +196,6 @@ export class MusicUI extends Component {
               <img src={this.props.MusicData.src} alt="Album cover" />
 
               <div>
-                -{" "}
                 <input
                   type="range"
                   id="points"
@@ -215,17 +204,7 @@ export class MusicUI extends Component {
                   step="1000"
                   max={this.props.MusicData.duration_ms}
                   onChange={this.handleChange}
-                />{" "}
-                +
-                {/* <Grid container spacing={2}>
-                  <Grid item xs>
-                    <Slider
-                      value={this.state.barValue}
-                      onChange={this.handleChange}
-                      aria-labelledby="continuous-slider"
-                    />
-                  </Grid>
-                </Grid> */}
+                />
               </div>
             </div>
 
@@ -233,14 +212,23 @@ export class MusicUI extends Component {
               <div className={classes.info__album}>
                 {this.props.MusicData.album}
               </div>
-
               <div className={classes.info__song}>
                 {this.props.MusicData.song}
               </div>
-
               <div className={classes.info__artist}>
                 {this.props.MusicData.artist}
-              </div>
+              </div>{" "}
+              -
+              <input
+                type="range"
+                id="volume"
+                name="volume"
+                min="0"
+                step="10"
+                max="100"
+                onChange={this.volumeHandler}
+              />{" "}
+              +
             </div>
 
             <div className={classes.body__buttons}>
